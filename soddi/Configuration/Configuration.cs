@@ -37,7 +37,8 @@ namespace Salient.StackExchange.Import.Configuration
             FullText = 2,
             Split = 4,
             GUI = 8,
-            FieldCount = 16
+            FieldCount = 16,
+			ForeignKeys = 32
         }
 
         #endregion
@@ -66,7 +67,7 @@ namespace Salient.StackExchange.Import.Configuration
             {
                 Options = value
                               ? Options | ImportOptions.FullText
-                              : Options & (ImportOptions)(ImportOptions.FieldCount - ImportOptions.FullText);
+							  : Options & (ImportOptions)(Options - ImportOptions.FullText);
             }
         }
 
@@ -77,7 +78,7 @@ namespace Salient.StackExchange.Import.Configuration
             {
                 Options = value
                               ? Options | ImportOptions.GUI
-                              : Options & (ImportOptions)(ImportOptions.FieldCount - ImportOptions.GUI);
+							  : Options & (ImportOptions)(Options - ImportOptions.GUI);
             }
         }
 
@@ -88,9 +89,20 @@ namespace Salient.StackExchange.Import.Configuration
             {
                 Options = value
                               ? Options | ImportOptions.Indices
-                              : Options & (ImportOptions)(ImportOptions.FieldCount - ImportOptions.Indices);
+                              : Options & (ImportOptions)(Options - ImportOptions.Indices);
             }
         }
+
+		public bool ForeignKeys
+		{
+			get { return (Options & ImportOptions.ForeignKeys) == ImportOptions.ForeignKeys; }
+			set
+			{
+				Options = value
+							  ? Options | ImportOptions.ForeignKeys
+							  : Options & (ImportOptions)(Options - ImportOptions.ForeignKeys);
+			}
+		}
 
         internal ImportOptions Options { get; set; }
 
